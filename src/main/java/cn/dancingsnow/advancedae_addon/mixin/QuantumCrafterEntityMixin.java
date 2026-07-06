@@ -13,7 +13,7 @@ import appeng.api.stacks.GenericStack;
 import appeng.api.storage.MEStorage;
 import appeng.api.upgrades.IUpgradeInventory;
 import appeng.api.upgrades.MachineUpgradesChanged;
-import appeng.blockentity.grid.AENetworkedPoweredBlockEntity;
+import appeng.blockentity.grid.AENetworkPowerBlockEntity;
 import appeng.core.definitions.AEItems;
 import appeng.helpers.MultiCraftingTracker;
 import appeng.util.inv.AppEngInternalInventory;
@@ -21,7 +21,6 @@ import com.google.common.collect.ImmutableSet;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.level.ItemLike;
@@ -43,8 +42,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-@Mixin(QuantumCrafterEntity.class)
-public abstract class QuantumCrafterEntityMixin extends AENetworkedPoweredBlockEntity implements ICraftingRequester {
+@Mixin(value = QuantumCrafterEntity.class, remap = false)
+public abstract class QuantumCrafterEntityMixin extends AENetworkPowerBlockEntity implements ICraftingRequester {
     @Unique
     private static final String ADVANCEDAE_ADDON_INPUT_CRAFTING_TAG = "advancedaeAddonInputCrafting";
 
@@ -123,14 +122,14 @@ public abstract class QuantumCrafterEntityMixin extends AENetworkedPoweredBlockE
     }
 
     @Inject(method = "saveAdditional", at = @At("TAIL"))
-    private void advancedae_addon$saveInputCraftingTracker(CompoundTag data, HolderLookup.Provider registries, CallbackInfo ci) {
+    private void advancedae_addon$saveInputCraftingTracker(CompoundTag data, CallbackInfo ci) {
         CompoundTag trackerTag = new CompoundTag();
         this.advancedae_addon$inputCraftingTracker.writeToNBT(trackerTag);
         data.put(ADVANCEDAE_ADDON_INPUT_CRAFTING_TAG, trackerTag);
     }
 
     @Inject(method = "loadTag", at = @At("TAIL"))
-    private void advancedae_addon$loadInputCraftingTracker(CompoundTag data, HolderLookup.Provider registries, CallbackInfo ci) {
+    private void advancedae_addon$loadInputCraftingTracker(CompoundTag data, CallbackInfo ci) {
         if (data.contains(ADVANCEDAE_ADDON_INPUT_CRAFTING_TAG, Tag.TAG_COMPOUND)) {
             this.advancedae_addon$inputCraftingTracker.readFromNBT(data.getCompound(ADVANCEDAE_ADDON_INPUT_CRAFTING_TAG));
         }
@@ -223,12 +222,12 @@ public abstract class QuantumCrafterEntityMixin extends AENetworkedPoweredBlockE
             return craftsPerTick;
         }
 
-        List<GenericStack> outputs = job.pattern.getOutputs();
-        if (outputs.isEmpty()) {
+        GenericStack[] outputs = job.pattern.getOutputs();
+        if (outputs == null || outputs.length == 0) {
             return 0;
         }
 
-        GenericStack output = outputs.getFirst();
+        GenericStack output = outputs[0];
         long stored = inventory.extract(output.what(), maxStock, Actionable.SIMULATE, this.mySrc);
         long amountInOutput = 0;
         for (int x = 0; x < this.outputInv.size(); x++) {

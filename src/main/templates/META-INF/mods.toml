@@ -1,4 +1,4 @@
-# This is an example neoforge.mods.toml file. It contains the data relating to the loading mods.
+# This is an example mods.toml file. It contains the data relating to the loading mods.
 # There are several mandatory fields (#mandatory), and many more that are optional (#optional).
 # The overall format is standard TOML format, v0.5.0.
 # Note that there are a couple of TOML lists in this file.
@@ -52,10 +52,6 @@ network while respecting speed upgrades, minimum input stock, and output limit
 count.
 '''
 
-# The [[mixins]] block allows you to declare your mixin config to FML so that it gets loaded.
-[[mixins]]
-config="${mod_id}.mixins.json"
-
 # The [[accessTransformers]] block allows you to declare where your AT file is.
 # If this block is omitted, a fallback attempt will be made to load an AT from META-INF/accesstransformer.cfg
 #[[accessTransformers]]
@@ -66,15 +62,15 @@ config="${mod_id}.mixins.json"
 # A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
 [[dependencies.${mod_id}]] #optional
     # the modid of the dependency
-    modId="neoforge" #mandatory
+    modId="forge" #mandatory
     # The type of the dependency. Can be one of "required", "optional", "incompatible" or "discouraged" (case insensitive).
     # 'required' requires the mod to exist, 'optional' does not
     # 'incompatible' will prevent the game from loading when the mod exists, and 'discouraged' will show a warning
-    type="required" #mandatory
+    mandatory=true #mandatory
     # Optional field describing why the dependency is required or why it is incompatible
     # reason="..."
     # The version range of the dependency
-    versionRange="[${neo_version},)" #mandatory
+    versionRange="[${forge_version},)" #mandatory
     # An ordering relationship for the dependency.
     # BEFORE - This mod is loaded BEFORE the dependency
     # AFTER - This mod is loaded AFTER the dependency
@@ -85,7 +81,7 @@ config="${mod_id}.mixins.json"
 # Here's another dependency
 [[dependencies.${mod_id}]]
     modId="minecraft"
-    type="required"
+    mandatory=true
     # This version range declares a minimum of the current minecraft version up to but not including the next major version
     versionRange="${minecraft_version_range}"
     ordering="NONE"
@@ -93,8 +89,8 @@ config="${mod_id}.mixins.json"
 
 [[dependencies.${mod_id}]]
     modId="ae2"
-    type="required"
-    versionRange="[19.2.17,)"
+    mandatory=true
+    versionRange="[15.4.10,)"
     ordering="AFTER"
     side="BOTH"
     [dependencies.${mod_id}.mc-publish]
@@ -103,8 +99,8 @@ config="${mod_id}.mixins.json"
 
 [[dependencies.${mod_id}]]
     modId="advanced_ae"
-    type="required"
-    versionRange="[1.6.11-1.21.1,)"
+    mandatory=true
+    versionRange="[1.3.5-1.20.1,)"
     ordering="AFTER"
     side="BOTH"
     [dependencies.${mod_id}.mc-publish]
@@ -120,5 +116,5 @@ config="${mod_id}.mixins.json"
 [mc-publish]
     modrinth="JaPlnBPl"
     curseforge=1600208
-    loaders=["neoforge"]
-    game-versions=["1.21.1"]
+    loaders=["forge"]
+    game-versions=["1.20.1"]
