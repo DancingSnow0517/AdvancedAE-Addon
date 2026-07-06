@@ -21,14 +21,13 @@ import com.google.common.collect.ImmutableSet;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.pedroksl.advanced_ae.common.entities.QuantumCrafterEntity;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -45,9 +44,6 @@ import java.util.Set;
 
 @Mixin(QuantumCrafterEntity.class)
 public abstract class QuantumCrafterEntityMixin extends AENetworkedPoweredBlockEntity implements ICraftingRequester {
-    @Unique
-    private static final String ADVANCEDAE_ADDON_INPUT_CRAFTING_TAG = "advancedaeAddonInputCrafting";
-
     @Unique
     private static final int ADVANCEDAE_ADDON_PATTERN_SLOTS = 9;
 
@@ -115,7 +111,7 @@ public abstract class QuantumCrafterEntityMixin extends AENetworkedPoweredBlockE
         }
 
         Level level = this.getLevel();
-        if (level == null || level.isClientSide) {
+        if (level == null || level.isClientSide()) {
             return;
         }
 
@@ -123,17 +119,13 @@ public abstract class QuantumCrafterEntityMixin extends AENetworkedPoweredBlockE
     }
 
     @Inject(method = "saveAdditional", at = @At("TAIL"))
-    private void advancedae_addon$saveInputCraftingTracker(CompoundTag data, HolderLookup.Provider registries, CallbackInfo ci) {
-        CompoundTag trackerTag = new CompoundTag();
-        this.advancedae_addon$inputCraftingTracker.writeToNBT(trackerTag);
-        data.put(ADVANCEDAE_ADDON_INPUT_CRAFTING_TAG, trackerTag);
+    private void advancedae_addon$saveInputCraftingTracker(ValueOutput output, CallbackInfo ci) {
+        this.advancedae_addon$inputCraftingTracker.writeToNBT(output);
     }
 
     @Inject(method = "loadTag", at = @At("TAIL"))
-    private void advancedae_addon$loadInputCraftingTracker(CompoundTag data, HolderLookup.Provider registries, CallbackInfo ci) {
-        if (data.contains(ADVANCEDAE_ADDON_INPUT_CRAFTING_TAG, Tag.TAG_COMPOUND)) {
-            this.advancedae_addon$inputCraftingTracker.readFromNBT(data.getCompound(ADVANCEDAE_ADDON_INPUT_CRAFTING_TAG));
-        }
+    private void advancedae_addon$loadInputCraftingTracker(ValueInput input, CallbackInfo ci) {
+        this.advancedae_addon$inputCraftingTracker.readFromNBT(input);
     }
 
     @Override
