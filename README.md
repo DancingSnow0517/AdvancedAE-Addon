@@ -1,25 +1,29 @@
+# AdvancedAE Addon
 
-Installation information
-=======
+[中文](README.zh_CN.md)
 
-This template repository can be directly cloned to get you started with a new
-mod. Simply create a new repository cloned from this one, by following the
-instructions provided by [GitHub](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template).
+AdvancedAE Addon is a NeoForge addon for Applied Energistics 2 and Advanced AE.
 
-Once you have your clone, simply open the repository in the IDE of your choice. The usual recommendation for an IDE is either IntelliJ IDEA or Eclipse.
+It adds AE2 Crafting Card support to Advanced AE's Quantum Crafter. When a Crafting Card is installed, the Quantum Crafter can request missing pattern inputs from the ME crafting network instead of staying blocked by unavailable ingredients.
 
-If at any point you are missing libraries in your IDE, or you've run into problems you can
-run `gradlew --refresh-dependencies` to refresh the local cache. `gradlew clean` to reset everything 
-{this does not affect your code} and then start the process again.
+## Features
 
-Mapping Names:
-============
-By default, the MDK is configured to use the official mapping names from Mojang for methods and fields 
-in the Minecraft codebase. These names are covered by a specific license. All modders should be aware of this
-license. For the latest license text, refer to the mapping file itself, or the reference copy here:
-https://github.com/NeoForged/NeoForm/blob/main/Mojang.md
+- Adds the AE2 Crafting Card as a Quantum Crafter upgrade.
+- Requests missing inputs through AE2's crafting system.
+- Supports Quantum Crafter speed upgrades, up to 64 crafts per tick with four
+  speed cards.
+- Respects minimum input stock settings.
+- Respects output limit count when calculating how many inputs to request.
 
-Additional Resources: 
-==========
-Community Documentation: https://docs.neoforged.net/  
-NeoForged Discord: https://discord.neoforged.net/
+## Requirements
+
+- Minecraft 1.21.1
+- NeoForge 21.1.209 or newer
+- Applied Energistics 2 19.2.17 or newer
+- Advanced AE 1.6.11-1.21.1 or newer
+
+## Building
+
+```sh
+./gradlew build
+```
