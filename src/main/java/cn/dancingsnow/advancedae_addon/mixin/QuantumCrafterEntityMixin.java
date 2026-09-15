@@ -121,7 +121,7 @@ public abstract class QuantumCrafterEntityMixin extends AENetworkPowerBlockEntit
         this.advancedae_addon$requestMissingInputs(level);
     }
 
-    @Inject(method = "saveAdditional", at = @At("TAIL"))
+    @Inject(method = "saveAdditional", at = @At("TAIL"), remap = true)
     private void advancedae_addon$saveInputCraftingTracker(CompoundTag data, CallbackInfo ci) {
         CompoundTag trackerTag = new CompoundTag();
         this.advancedae_addon$inputCraftingTracker.writeToNBT(trackerTag);
