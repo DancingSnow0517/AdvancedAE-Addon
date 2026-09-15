@@ -2,6 +2,7 @@
   "required": true,
   "minVersion": "0.8",
   "package": "cn.dancingsnow.advancedae_addon.mixin",
+  "refmap": "advancedae_addon.refmap.json",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "QuantumCrafterEntityMixin"
